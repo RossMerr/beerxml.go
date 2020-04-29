@@ -22,8 +22,8 @@ type Style struct {
 	IBUMAX         float32 `xml:"IBU_MAX" json:"ibu_max,omitempty"`
 	Colormin       float32 `xml:"COLOR_MIN" json:"color_min,omitempty"`
 	Colormax       float32 `xml:"COLOR_MAX" json:"color_max,omitempty"`
-	Carbmin        string  `xml:"CARB_MIN" json:"carb_min,omitempty"`
-	Carbmax        string  `xml:"CARB_MAX" json:"carb_max,omitempty"`
+	Carbmin        float32  `xml:"CARB_MIN" json:"carb_min,omitempty"`
+	Carbmax        float32  `xml:"CARB_MAX" json:"carb_max,omitempty"`
 	ABVMAX         float32 `xml:"ABV_MAX" json:"abv_max,omitempty"`
 	ABVMIN         float32 `xml:"ABV_MIN" json:"abv_min,omitempty"`
 	Notes          string  `xml:"NOTES" json:"notes,omitempty"`
