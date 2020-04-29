@@ -39,6 +39,7 @@ type Recipe struct {
 	Secondaryage         int32        `xml:"SECONDARY_AGE" json:"secondary_age,omitempty"`
 	Secondarytemp        float64      `xml:"SECONDARY_TEMP" json:"secondary_temp,omitempty"`
 	Tertiaryage          int32        `xml:"TERTIARY_AGE" json:"tertiary_age,omitempty"`
+	Tertiarytemp         float64      `xml:"TERTIARY_TEMP" json:"tertiary_temp,omitempty"`
 	Age                  float32      `xml:"AGE" json:"age,omitempty"`
 	Agetemp              float64      `xml:"AGE_TEMP" json:"age_temp,omitempty"`
 	Date                 string       `xml:"DATE" json:"date,omitempty"`
@@ -54,12 +55,12 @@ type Recipe struct {
 	DisplayPrimaryTemp   string       `xml:"DISPLAY_PRIMARY_TEMP" json:"display_primary_temp,omitempty"`
 	DisplaySecondaryTemp string       `xml:"DISPLAY_SECONDARY_TEMP" json:"display_secondary_temp,omitempty"`
 	DisplayTertiaryTemp  string       `xml:"DISPLAY_TERTIARY_TEMP" json:"display_tertiary_temp,omitempty"`
-	EstABV   string `xml:"EST_ABV" json:"est_abv,omitempty"`
-	EstColor string `xml:"EST_COLOR" json:"est_color,omitempty"`
-	EstFF    string `xml:"EST_FG" json:"est_fg,omitempty"`
-	EstOG    string `xml:"EST_OG" json:"est_og,omitempty"`
-	IBU       string `xml:"IBU" json:"ibu,omitempty"`
-	IBUMethod string `xml:"IBU_METHOD" json:"ibu_method,omitempty"`
+	EstABV               string       `xml:"EST_ABV" json:"est_abv,omitempty"`
+	EstColor             string       `xml:"EST_COLOR" json:"est_color,omitempty"`
+	EstFF                string       `xml:"EST_FG" json:"est_fg,omitempty"`
+	EstOG                string       `xml:"EST_OG" json:"est_og,omitempty"`
+	IBU                  string       `xml:"IBU" json:"ibu,omitempty"`
+	IBUMethod            string       `xml:"IBU_METHOD" json:"ibu_method,omitempty"`
 }
 
 func (a Recipe) MarshalJSON() ([]byte, error) {
