@@ -17,6 +17,8 @@ func BeerXML(w http.ResponseWriter, r *http.Request, recipes *beerXML.RECIPES) {
 	dec := xml.NewTokenDecoder(reader.Trimmer{decoder}) // trimming decoder
 
 	err := dec.Decode(&recipes)
+
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

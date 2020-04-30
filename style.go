@@ -2,9 +2,13 @@ package beerXML
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"strconv"
 	"strings"
 )
+
+var _ xml.Unmarshaler = (*Style)(nil)
+
 
 type Style struct {
 	Name           string  `xml:"NAME" json:"name,omitempty"`
@@ -45,7 +49,7 @@ type Style struct {
 	OGRange         string `xml:"OG_RANGE" json:"og_range,omitempty"`
 }
 
-func (a Style) MarshalJSON() ([]byte, error) {
+func (a *Style) MarshalJSON() ([]byte, error) {
 
 	type Alias Style
 	t := func() int32 {
@@ -57,27 +61,40 @@ func (a Style) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(&struct {
 		Type    int32   `json:"type,omitempty"`
-		CarbMin float32 `json:"carb_min,omitempty"`
-		CarbMax float32 `json:"carb_max,omitempty"`
 		*Alias
 	}{
 		Type: t,
-		CarbMin: func() float32 {
-			str := string(reg.Find([]byte(a.Carbmax)))
-			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
-		}(),
-		CarbMax: func() float32 {
-			str := string(reg.Find([]byte(a.Carbmax)))
-			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
-		}(),
-		Alias: (*Alias)(&a),
+		Alias: (*Alias)(a),
 	})
 }
 
 func (a *Style) UnmarshalJSON(b []byte) error {
 	return nil
+}
+
+
+func (a *Style) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type Alias Style
+	vX := struct {
+		Carbmin string `xml:"CARB_MIN"`
+		Carbmax string `xml:"CARB_MAX"`
+		*Alias
+	}{
+		Alias: (*Alias)(a),
+	}
+
+	err := d.DecodeElement(&vX, &start)
+
+	a.Carbmax = toFloat(vX.Carbmax)
+	a.Carbmin = toFloat(vX.Carbmin)
+
+	return err
+}
+
+func toFloat(s string) float32 {
+	str := reg.FindString(s)
+	f, _ := strconv.ParseFloat(str, 64)
+	return float32(f)
 }
 
 type Style_StyleType int32
