@@ -18,7 +18,6 @@ func BeerXML(w http.ResponseWriter, r *http.Request, recipes *beerXML.RECIPES) {
 
 	err := dec.Decode(&recipes)
 
-
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

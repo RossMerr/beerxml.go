@@ -122,10 +122,17 @@ func walk(nodes []*Node) map[string]interface{} {
 			str := string(content)
 
 			if f, err := strconv.ParseInt(str, 10, 32); err == nil {
-				m[n.XMLName.Local] = f
+				if f != 0 {
+					m[n.XMLName.Local] = f
+				} else {
+					delete(m, n.XMLName.Local)
+				}
 			} else if f, err := strconv.ParseFloat(str, 32); err == nil {
-				m[n.XMLName.Local] = f
-			} else if  f, err := strconv.ParseBool(str); err == nil {
+				if f != 0 {
+					m[n.XMLName.Local] = f
+				} else {
+					delete(m, n.XMLName.Local)
+				}			} else if f, err := strconv.ParseBool(str); err == nil {
 				m[n.XMLName.Local] = f
 			} else {
 				m[n.XMLName.Local] = html.UnescapeString(str)

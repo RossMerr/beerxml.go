@@ -10,7 +10,7 @@ import (
 func TestStyle_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name    string
-		xml string
+		xml     string
 		wantErr bool
 	}{
 		{
