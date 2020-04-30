@@ -11,7 +11,7 @@ type Mash struct {
 	Tunspecificheat   float32   `xml:"TUN_SPECIFIC_HEAT" json:"tun_specific_heat,omitempty"`
 	Equipadjust       bool      `xml:"EQUIP_ADJUST" json:"equip_adjust,omitempty"`
 	Notes             string    `xml:"NOTES" json:"notes,omitempty"`
-	Mashsteps         MashSteps `xml:"MASH_STEPS" json:"mash_steps,omitempty"`
+	Mashsteps         *MashSteps `xml:"MASH_STEPS" json:"mash_steps,omitempty"`
 	DisplayGrainTemp  string    `xml:"DISPLAY_GRAIN_TEMP" json:"display_grain_temp,omitempty"`
 	DisplaySpargeTemp string    `xml:"DISPLAY_SPARGE_TEMP" json:"display_sparge_temp,omitempty"`
 	DisplayTunTemp    string    `xml:"DISPLAY_TUN_TEMP" json:"display_tun_temp,omitempty"`

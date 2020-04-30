@@ -19,14 +19,14 @@ type Recipe struct {
 	BoilSize             float32      `xml:"BOIL_SIZE" json:"boil_size,omitempty"`
 	BoilTime             float32      `xml:"BOIL_TIME" json:"boil_time,omitempty"`
 	Efficiency           float32      `xml:"EFFICIENCY" json:"efficiency,omitempty"`
-	Hops                 Hops         `xml:"HOPS" json:"hops,omitempty"`
-	Fermentables         Fermentables `xml:"FERMENTABLES" json:"fermentables,omitempty"`
-	Miscs                MISCS        `xml:"MISCS" json:"miscs,omitempty"`
-	Yeasts               Yeasts       `xml:"YEASTS" json:"yeasts,omitempty"`
-	Waters               Waters       `xml:"WATERS" json:"waters,omitempty"`
-	Style                Style        `xml:"STYLE" json:"style,omitempty"`
-	Equipment            Equipment    `xml:"EQUIPMENT" json:"equipment,omitempty"`
-	Mash                 Mash         `xml:"MASH" json:"mash,omitempty"`
+	Hops                 *Hops         `xml:"HOPS" json:"hops,omitempty"`
+	Fermentables         *Fermentables `xml:"FERMENTABLES" json:"fermentables,omitempty"`
+	Miscs                *MISCS        `xml:"MISCS" json:"miscs,omitempty"`
+	Yeasts               *Yeasts       `xml:"YEASTS" json:"yeasts,omitempty"`
+	Waters               *Waters       `xml:"WATERS" json:"waters,omitempty"`
+	Style                *Style        `xml:"STYLE" json:"style,omitempty"`
+	Equipment            *Equipment    `xml:"EQUIPMENT" json:"equipment,omitempty"`
+	Mash                 *Mash         `xml:"MASH" json:"mash,omitempty"`
 	Notes                string       `xml:"NOTES" json:"notes,omitempty"`
 	Tastenotes           string       `xml:"TASTE_NOTES" json:"taste_notes,omitempty"`
 	Tasterating          float32      `xml:"TASTE_RATING" json:"taste_rating,omitempty"`
