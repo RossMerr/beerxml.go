@@ -12,9 +12,9 @@ import (
 	"strconv"
 	"testing"
 
-	beerXML "github.com/RossMerr/beerxml.go"
-	"github.com/RossMerr/beerxml.go/handlers"
-	"github.com/RossMerr/beerxml.go/reader"
+	beerXML "github.com/beerproto/beerxml.go"
+	"github.com/beerproto/beerxml.go/handlers"
+	"github.com/beerproto/beerxml.go/reader"
 )
 
 func TestSchemas_Generate(t *testing.T) {

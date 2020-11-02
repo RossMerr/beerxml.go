@@ -8,7 +8,7 @@ type MashStep struct {
 	Name             string  `xml:"NAME" json:"name,omitempty"`
 	Version          int32   `xml:"VERSION" json:"version,omitempty"`
 	Type             string  `xml:"TYPE" json:"type,omitempty"`
-	Infuseamount     float32 `xml:"INFUSE_AMOUNT" json:"infuse_amount,omitempty"`
+	Infuseamount     float64 `xml:"INFUSE_AMOUNT" json:"infuse_amount,omitempty"`
 	Steptime         int64   `xml:"STEP_TIME" json:"step_time,omitempty"`
 	Steptemp         float64 `xml:"STEP_TEMP" json:"step_temp,omitempty"`
 	Ramptime         int64   `xml:"RAMP_TIME" json:"ramp_time,omitempty"`

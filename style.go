@@ -17,18 +17,18 @@ type Style struct {
 	Styleletter    string  `xml:"STYLE_LETTER" json:"style_letter,omitempty"`
 	Styleguide     string  `xml:"STYLE_GUIDE" json:"style_guide,omitempty"`
 	Type           string  `xml:"TYPE" json:"type,omitempty"`
-	OGMIN          float32 `xml:"OG_MIN" json:"og_min,omitempty"`
-	OGMAX          float32 `xml:"OG_MAX" json:"og_max,omitempty"`
-	FGMIN          float32 `xml:"FG_MIN" json:"fg_min,omitempty"`
-	FGMAX          float32 `xml:"FG_MAX" json:"fg_max,omitempty"`
-	IBUMIN         float32 `xml:"IBU_MIN" json:"ibu_min,omitempty"`
-	IBUMAX         float32 `xml:"IBU_MAX" json:"ibu_max,omitempty"`
-	Colormin       float32 `xml:"COLOR_MIN" json:"color_min,omitempty"`
-	Colormax       float32 `xml:"COLOR_MAX" json:"color_max,omitempty"`
-	Carbmin        float32 `xml:"CARB_MIN" json:"carb_min,omitempty"`
-	Carbmax        float32 `xml:"CARB_MAX" json:"carb_max,omitempty"`
-	ABVMAX         float32 `xml:"ABV_MAX" json:"abv_max,omitempty"`
-	ABVMIN         float32 `xml:"ABV_MIN" json:"abv_min,omitempty"`
+	OGMIN          float64 `xml:"OG_MIN" json:"og_min,omitempty"`
+	OGMAX          float64 `xml:"OG_MAX" json:"og_max,omitempty"`
+	FGMIN          float64 `xml:"FG_MIN" json:"fg_min,omitempty"`
+	FGMAX          float64 `xml:"FG_MAX" json:"fg_max,omitempty"`
+	IBUMIN         float64 `xml:"IBU_MIN" json:"ibu_min,omitempty"`
+	IBUMAX         float64 `xml:"IBU_MAX" json:"ibu_max,omitempty"`
+	Colormin       float64 `xml:"COLOR_MIN" json:"color_min,omitempty"`
+	Colormax       float64 `xml:"COLOR_MAX" json:"color_max,omitempty"`
+	Carbmin        float64 `xml:"CARB_MIN" json:"carb_min,omitempty"`
+	Carbmax        float64 `xml:"CARB_MAX" json:"carb_max,omitempty"`
+	ABVMAX         float64 `xml:"ABV_MAX" json:"abv_max,omitempty"`
+	ABVMIN         float64 `xml:"ABV_MIN" json:"abv_min,omitempty"`
 	Notes          string  `xml:"NOTES" json:"notes,omitempty"`
 	Profile        string  `xml:"PROFILE" json:"profile,omitempty"`
 	Ingredients    string  `xml:"INGREDIENTS" json:"ingredients,omitempty"`
@@ -89,10 +89,10 @@ func (a *Style) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return err
 }
 
-func toFloat(s string) float32 {
+func toFloat(s string) float64 {
 	str := reg.FindString(s)
 	f, _ := strconv.ParseFloat(str, 64)
-	return float32(f)
+	return f
 }
 
 type Style_StyleType int32

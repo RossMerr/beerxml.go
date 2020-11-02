@@ -10,9 +10,9 @@ type Fermentable struct {
 	Name           string  `xml:"NAME" json:"name,omitempty"`
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
 	Type           string  `xml:"TYPE" json:"type,omitempty"`
-	Amount         float32 `xml:"AMOUNT" json:"amount,omitempty"`
-	Yield          float32 `xml:"YIELD" json:"yield,omitempty"`
-	Color          float32 `xml:"COLOR" json:"color,omitempty"`
+	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
+	Yield          float64 `xml:"YIELD" json:"yield,omitempty"`
+	Color          float64 `xml:"COLOR" json:"color,omitempty"`
 	Addafterboil   bool    `xml:"ADD_AFTER_BOIL" json:"add_after_boil,omitempty"`
 	Origin         string  `xml:"ORIGIN" json:"origin,omitempty"`
 	Supplier       string  `xml:"SUPPLIER" json:"supplier,omitempty"`
@@ -23,7 +23,7 @@ type Fermentable struct {
 	Protein        string  `xml:"PROTEIN" json:"protein,omitempty"`
 	Maxinbatch     string  `xml:"MAX_IN_BATCH" json:"max_in_batch,omitempty"`
 	Recommendmash  bool    `xml:"RECOMMEND_MASH" json:"recommend_mash,omitempty"`
-	Ibugalperlb    float32 `xml:"IBU_GAL_PER_LB" json:"ibu_gal_per_lb,omitempty"`
+	Ibugalperlb    float64 `xml:"IBU_GAL_PER_LB" json:"ibu_gal_per_lb,omitempty"`
 	Potential      string  `xml:"POTENTIAL" json:"potential,omitempty"`
 
 	DisplayAmount string `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
@@ -43,44 +43,44 @@ func (a Fermentable) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(&struct {
 		Type           int32   `json:"type,omitempty"`
-		Coarsefinediff float32 `json:"coarse_fine_diff,omitempty"`
-		Moisture       float32 `json:"moisture,omitempty"`
-		Diastaticpower float32 `json:"diastatic_power,omitempty"`
-		Protein        float32 `json:"protein,omitempty"`
-		Maxinbatch     float32 `json:"max_in_batch,omitempty"`
-		Potential      float32 `json:"potential,omitempty"`
+		Coarsefinediff float64 `json:"coarse_fine_diff,omitempty"`
+		Moisture       float64 `json:"moisture,omitempty"`
+		Diastaticpower float64 `json:"diastatic_power,omitempty"`
+		Protein        float64 `json:"protein,omitempty"`
+		Maxinbatch     float64 `json:"max_in_batch,omitempty"`
+		Potential      float64 `json:"potential,omitempty"`
 		*Alias
 	}{
 		Type: t,
-		Coarsefinediff: func() float32 {
+		Coarsefinediff: func() float64 {
 			str := string(reg.Find([]byte(a.Coarsefinediff)))
 			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
+			return f
 		}(),
-		Moisture: func() float32 {
+		Moisture: func() float64 {
 			str := string(reg.Find([]byte(a.Moisture)))
 			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
+			return f
 		}(),
-		Diastaticpower: func() float32 {
+		Diastaticpower: func() float64 {
 			str := string(reg.Find([]byte(a.Diastaticpower)))
 			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
+			return f
 		}(),
-		Protein: func() float32 {
+		Protein: func() float64 {
 			str := string(reg.Find([]byte(a.Protein)))
 			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
+			return f
 		}(),
-		Maxinbatch: func() float32 {
+		Maxinbatch: func() float64 {
 			str := string(reg.Find([]byte(a.Maxinbatch)))
 			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
+			return f
 		}(),
-		Potential: func() float32 {
+		Potential: func() float64 {
 			str := string(reg.Find([]byte(a.Potential)))
 			f, _ := strconv.ParseFloat(str, 64)
-			return float32(f)
+			return f
 		}(),
 		Alias: (*Alias)(&a),
 	})

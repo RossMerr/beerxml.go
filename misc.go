@@ -10,8 +10,8 @@ type MISC struct {
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
 	Type           string  `xml:"TYPE" json:"type,omitempty"`
 	Use            string  `xml:"USE" json:"use,omitempty"`
-	Amount         float32 `xml:"AMOUNT" json:"amount,omitempty"`
-	Time           float32 `xml:"TIME" json:"time,omitempty"`
+	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
+	Time           float64 `xml:"TIME" json:"time,omitempty"`
 	Amountisweight bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
 	Usefor         string  `xml:"USE_FOR" json:"use_for,omitempty"`
 	Notes          string  `xml:"NOTES" json:"notes,omitempty"`

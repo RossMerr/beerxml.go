@@ -6,9 +6,9 @@ type Mash struct {
 	Graintemp         float64   `xml:"GRAIN_TEMP" json:"grain_temp,omitempty"`
 	Tuntemp           float64   `xml:"TUN_TEMP" json:"tun_temp,omitempty"`
 	Spargetemp        float64   `xml:"SPARGE_TEMP" json:"sparge_temp,omitempty"`
-	PH                float32   `xml:"PH" json:"ph,omitempty"`
-	Tunweight         float32   `xml:"TUN_WEIGHT" json:"tun_weight,omitempty"`
-	Tunspecificheat   float32   `xml:"TUN_SPECIFIC_HEAT" json:"tun_specific_heat,omitempty"`
+	PH                float64   `xml:"PH" json:"ph,omitempty"`
+	Tunweight         float64   `xml:"TUN_WEIGHT" json:"tun_weight,omitempty"`
+	Tunspecificheat   float64   `xml:"TUN_SPECIFIC_HEAT" json:"tun_specific_heat,omitempty"`
 	Equipadjust       bool      `xml:"EQUIP_ADJUST" json:"equip_adjust,omitempty"`
 	Notes             string    `xml:"NOTES" json:"notes,omitempty"`
 	Mashsteps         *MashSteps `xml:"MASH_STEPS" json:"mash_steps,omitempty"`

@@ -15,10 +15,10 @@ type Recipe struct {
 	Type                 string       `xml:"TYPE" json:"type,omitempty"`
 	Brewer               string       `xml:"BREWER" json:"author,omitempty"`
 	AsstBrewer           string       `xml:"ASST_BREWER" json:"coauthor,omitempty"`
-	BatchSize            float32      `xml:"BATCH_SIZE" json:"batch_size,omitempty"`
-	BoilSize             float32      `xml:"BOIL_SIZE" json:"boil_size,omitempty"`
-	BoilTime             float32      `xml:"BOIL_TIME" json:"boil_time,omitempty"`
-	Efficiency           float32      `xml:"EFFICIENCY" json:"efficiency,omitempty"`
+	BatchSize            float64      `xml:"BATCH_SIZE" json:"batch_size,omitempty"`
+	BoilSize             float64      `xml:"BOIL_SIZE" json:"boil_size,omitempty"`
+	BoilTime             float64      `xml:"BOIL_TIME" json:"boil_time,omitempty"`
+	Efficiency           float64      `xml:"EFFICIENCY" json:"efficiency,omitempty"`
 	Hops                 *Hops         `xml:"HOPS" json:"hops,omitempty"`
 	Fermentables         *Fermentables `xml:"FERMENTABLES" json:"fermentables,omitempty"`
 	Miscs                *MISCS        `xml:"MISCS" json:"miscs,omitempty"`
@@ -29,10 +29,10 @@ type Recipe struct {
 	Mash                 *Mash         `xml:"MASH" json:"mash,omitempty"`
 	Notes                string       `xml:"NOTES" json:"notes,omitempty"`
 	Tastenotes           string       `xml:"TASTE_NOTES" json:"taste_notes,omitempty"`
-	Tasterating          float32      `xml:"TASTE_RATING" json:"taste_rating,omitempty"`
-	OG                   float32      `xml:"OG" json:"og,omitempty"`
-	FG                   float32      `xml:"FG" json:"fg,omitempty"`
-	Carbonation          float32      `xml:"CARBONATION" json:"carbonation,omitempty"`
+	Tasterating          float64      `xml:"TASTE_RATING" json:"taste_rating,omitempty"`
+	OG                   float64      `xml:"OG" json:"og,omitempty"`
+	FG                   float64      `xml:"FG" json:"fg,omitempty"`
+	Carbonation          float64      `xml:"CARBONATION" json:"carbonation,omitempty"`
 	Fermentationstages   int32        `xml:"FERMENTATION_STAGES" json:"fermentation_stages,omitempty"`
 	Primaryage           int32        `xml:"PRIMARY_AGE" json:"primary_age,omitempty"`
 	Primarytemp          float64      `xml:"PRIMARY_TEMP" json:"primary_temp,omitempty"`

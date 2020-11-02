@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"net/http"
 
-	beerXML "github.com/RossMerr/beerxml.go"
-	"github.com/RossMerr/beerxml.go/reader"
+	beerXML "github.com/beerproto/beerxml.go"
+	"github.com/beerproto/beerxml.go/reader"
 )
 
 func BeerXML(w http.ResponseWriter, r *http.Request, recipes *beerXML.RECIPES) {

@@ -10,18 +10,18 @@ type Yeast struct {
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
 	Type           string  `xml:"TYPE" json:"type,omitempty"`
 	Form           string  `xml:"FORM" json:"form,omitempty"`
-	Amount         float32 `xml:"AMOUNT" json:"amount,omitempty"`
+	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
 	Amountisweight bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
 	Laboratory     string  `xml:"LABORATORY" json:"laboratory,omitempty"`
 	Productid      string  `xml:"PRODUCT_ID" json:"product_id,omitempty"`
 	Mintemperature float64 `xml:"MIN_TEMPERATURE" json:"min_temperature,omitempty"`
 	Maxtemperature float64 `xml:"MAX_TEMPERATURE" json:"max_temperature,omitempty"`
 	Flocculation   string  `xml:"FLOCCULATION" json:"flocculation,omitempty"`
-	Attenuation    float32 `xml:"ATTENUATION" json:"attenuation,omitempty"`
+	Attenuation    float64 `xml:"ATTENUATION" json:"attenuation,omitempty"`
 	Notes          string  `xml:"NOTES" json:"notes,omitempty"`
 	Bestfor        string  `xml:"BEST_FOR" json:"best_for,omitempty"`
-	Maxreuse       float32 `xml:"MAX_REUSE" json:"max_reuse,omitempty"`
-	Timescultured  float32 `xml:"TIMES_CULTURED" json:"times_cultured,omitempty"`
+	Maxreuse       float64 `xml:"MAX_REUSE" json:"max_reuse,omitempty"`
+	Timescultured  float64 `xml:"TIMES_CULTURED" json:"times_cultured,omitempty"`
 	Addtosecondary bool    `xml:"ADD_TO_SECONDARY" json:"add_to_secondary,omitempty"`
 	CultureDate    string  `xml:"CULTURE_DATE" json:"culture_date,omitempty"`
 	DisplayAmount  string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`

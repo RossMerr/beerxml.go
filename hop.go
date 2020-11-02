@@ -9,15 +9,15 @@ type Hop struct {
 	Name    string  `xml:"NAME" json:"name,omitempty"`
 	Version int32   `xml:"VERSION" json:"version,omitempty"`
 	Origin  string  `xml:"ORIGIN" json:"origin,omitempty"`
-	Alpha   float32 `xml:"ALPHA" json:"alpha,omitempty"`
-	Amount  float32 `xml:"AMOUNT" json:"amount,omitempty"`
+	Alpha   float64 `xml:"ALPHA" json:"alpha,omitempty"`
+	Amount  float64 `xml:"AMOUNT" json:"amount,omitempty"`
 	Use     string  `xml:"USE" json:"use,omitempty"`
-	Time    float32 `xml:"TIME" json:"time,omitempty"`
+	Time    float64 `xml:"TIME" json:"time,omitempty"`
 	Notes   string  `xml:"NOTES" json:"notes,omitempty"`
 	Type    string  `xml:"TYPE" json:"type,omitempty"`
 	Form    string  `xml:"FORM" json:"form,omitempty"`
-	Beta    float32 `xml:"BETA" json:"beta,omitempty"`
-	HSI     float32 `xml:"HSI" json:"hsi,omitempty"`
+	Beta    float64 `xml:"BETA" json:"beta,omitempty"`
+	HSI     float64 `xml:"HSI" json:"hsi,omitempty"`
 
 	DisplayAmount string `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
 	DisplayTime   string `xml:"DISPLAY_TIME" json:"display_time,omitempty"`

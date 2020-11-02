@@ -7,14 +7,14 @@ import (
 type Water struct {
 	Name          string  `xml:"NAME" json:"name,omitempty"`
 	Version       int32   `xml:"VERSION" json:"version,omitempty"`
-	Amount        float32 `xml:"AMOUNT" json:"amount,omitempty"`
-	Calcium       float32 `xml:"CALCIUM" json:"calcium,omitempty"`
-	Bicarbonate   float32 `xml:"BICARBONATE" json:"bicarbonate,omitempty"`
-	Sulfate       float32 `xml:"SULFATE" json:"sulfate,omitempty"`
-	Chloride      float32 `xml:"CHLORIDE" json:"chloride,omitempty"`
-	Sodium        float32 `xml:"SODIUM" json:"sodium,omitempty"`
-	Magnesium     float32 `xml:"MAGNESIUM" json:"magnesium,omitempty"`
-	PH            float32 `xml:"PH" json:"ph,omitempty"`
+	Amount        float64 `xml:"AMOUNT" json:"amount,omitempty"`
+	Calcium       float64 `xml:"CALCIUM" json:"calcium,omitempty"`
+	Bicarbonate   float64 `xml:"BICARBONATE" json:"bicarbonate,omitempty"`
+	Sulfate       float64 `xml:"SULFATE" json:"sulfate,omitempty"`
+	Chloride      float64 `xml:"CHLORIDE" json:"chloride,omitempty"`
+	Sodium        float64 `xml:"SODIUM" json:"sodium,omitempty"`
+	Magnesium     float64 `xml:"MAGNESIUM" json:"magnesium,omitempty"`
+	PH            float64 `xml:"PH" json:"ph,omitempty"`
 	Notes         string  `xml:"NOTES" json:"notes,omitempty"`
 	DisplayAmount string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
 }

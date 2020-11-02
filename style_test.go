@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"testing"
 
-	beerXML "github.com/RossMerr/beerxml.go"
+	beerXML "github.com/beerproto/beerxml.go"
 )
 
 func TestStyle_UnmarshalXML(t *testing.T) {
