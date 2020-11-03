@@ -1,9 +1,14 @@
 package beerXML
 
 import (
-	"encoding/json"
+	"encoding/xml"
 	"strings"
 )
+
+// Encloses a set of one or more Yeast records.
+type Yeasts struct {
+	Yeast []Yeast `xml:"YEAST" json:"yeast,omitempty"`
+}
 
 // The term "yeast" encompasses all yeasts, including dry yeast, liquid yeast and yeast starters.
 type Yeast struct {
@@ -12,127 +17,151 @@ type Yeast struct {
 	// Version of the standard.  Should be “1” for this version.
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
 	// May be “Ale”, “Lager”, “Wheat”, “Wine” or “Champagne”
-	Type           string  `xml:"TYPE" json:"type,omitempty"`
+	Type           Culture_CultureType  `xml:"TYPE" json:"type,omitempty"`
 	// May be “Liquid”, “Dry”, “Slant” or “Culture”
-	Form           string  `xml:"FORM" json:"form,omitempty"`
+	Form           Culture_FormType  `xml:"FORM" json:"form,omitempty"`
 	// The amount of yeast, measured in liters.  For a starter this is the size of the starter.
 	// If the flag AMOUNT_IS_WEIGHT is set to TRUE then this measurement is in kilograms and not liters.
 	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
 	// TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.
 	// Default value (if not present) is assumed to be FALSE – therefore the yeast measurement is a liquid
 	// amount by default.
-	AmountIsWeight *bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
+	AmountIsWeight *bool    `xml:"AMOUNT_IS_WEIGHT,omitempty" json:"amount_is_weight,omitempty"`
 	// The name of the laboratory that produced the yeast.
-	Laboratory     *string  `xml:"LABORATORY" json:"laboratory,omitempty"`
+	Laboratory     *string  `xml:"LABORATORY,omitempty" json:"laboratory,omitempty"`
 	// The manufacturer’s product ID label or number that identifies this particular strain of yeast.
-	ProductID      *string  `xml:"PRODUCT_ID" json:"product_id,omitempty"`
+	ProductID      *string  `xml:"PRODUCT_ID,omitempty" json:"product_id,omitempty"`
 	// The minimum recommended temperature for fermenting this yeast strain in degrees Celsius.
-	MinTemperature *float64 `xml:"MIN_TEMPERATURE" json:"min_temperature,omitempty"`
+	MinTemperature *float64 `xml:"MIN_TEMPERATURE,omitempty" json:"min_temperature,omitempty"`
 	// The maximum recommended temperature for fermenting this yeast strain in Celsius.
-	MaxTemperature *float64 `xml:"MAX_TEMPERATURE" json:"max_temperature,omitempty"`
+	MaxTemperature *float64 `xml:"MAX_TEMPERATURE,omitempty" json:"max_temperature,omitempty"`
 	// May be “Low”, “Medium”, “High” or “Very High”
-	Flocculation   *string  `xml:"FLOCCULATION" json:"flocculation,omitempty"`
+	Flocculation   *string  `xml:"FLOCCULATION,omitempty" json:"flocculation,omitempty"`
 	// Average attenuation for this yeast strain.
-	Attenuation    *float64 `xml:"ATTENUATION" json:"attenuation,omitempty"`
+	Attenuation    *float64 `xml:"ATTENUATION,omitempty" json:"attenuation,omitempty"`
 	// Notes on this yeast strain.  May be a multiline entry.
-	Notes          *string  `xml:"NOTES" json:"notes,omitempty"`
+	Notes          *string  `xml:"NOTES,omitempty" json:"notes,omitempty"`
 	// Styles or types of beer this yeast strain is best suited for.
-	BestFor        *string  `xml:"BEST_FOR" json:"best_for,omitempty"`
+	BestFor        *string  `xml:"BEST_FOR,omitempty" json:"best_for,omitempty"`
 	// Number of times this yeast has been reused as a harvested culture.  This number should be zero if this is a
 	// product directly from the manufacturer.
-	TimesCultured  *float64 `xml:"TIMES_CULTURED" json:"times_cultured,omitempty"`
+	TimesCultured  *float64 `xml:"TIMES_CULTURED,omitempty" json:"times_cultured,omitempty"`
 	// Recommended of times this yeast can be reused (recultured from a previous batch)
-	MaxReuse       *float64 `xml:"MAX_REUSE" json:"max_reuse,omitempty"`
+	MaxReuse       *float64 `xml:"MAX_REUSE,omitempty" json:"max_reuse,omitempty"`
 	// Flag denoting that this yeast was added for a secondary (or later) fermentation as opposed to the primary
 	// fermentation.  Useful if one uses two or more yeast strains for a single brew (eg: Lambic).
 	// Default value is FALSE.
-	AddToSecondary *bool    `xml:"ADD_TO_SECONDARY" json:"add_to_secondary,omitempty"`
+	AddToSecondary *bool    `xml:"ADD_TO_SECONDARY,omitempty" json:"add_to_secondary,omitempty"`
 
 	// Extensions
 
 	// The amount of yeast or starter in this record along with the units formatted for easy display in the
 	// current user defined units.  For example “1.5 oz” or “100 g”.
-	DisplayAmount  string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
+	DisplayAmount  *string  `xml:"DISPLAY_AMOUNT,omitempty" json:"display_amount,omitempty"`
 	// Minimum fermentation temperature converted to current user units along with the units.
 	// For example “54.0 F” or “24.2 C”
-	DispMinTemp    string  `xml:"DISP_MIN_TEMP" json:"disp_min_temp,omitempty"`
+	DispMinTemp    *string  `xml:"DISP_MIN_TEMP,omitempty" json:"disp_min_temp,omitempty"`
 	// Maximum fermentation temperature converted to current user units along with the units.
 	// For example “54.0 F” or “24.2 C”
-	DispMaxTemp    string  `xml:"DISP_MAX_TEMP" json:"disp_max_temp,omitempty"`
+	DispMaxTemp    *string  `xml:"DISP_MAX_TEMP,omitempty" json:"disp_max_temp,omitempty"`
 	// Amount in inventory for this hop along with the units – for example “10.0 pkgs”
-	Inventory      string  `xml:"INVENTORY" json:"inventory,omitempty"`
+	Inventory      *string  `xml:"INVENTORY,omitempty" json:"inventory,omitempty"`
 	// Date sample was last cultured in a neutral date form such as “10 Dec 04”
-	CultureDate    string  `xml:"CULTURE_DATE" json:"culture_date,omitempty"`
+	CultureDate    *string  `xml:"CULTURE_DATE,omitempty" json:"culture_date,omitempty"`
 }
 
-func (a Yeast) MarshalJSON() ([]byte, error) {
 
+func (a *Yeast) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	type Alias Yeast
-	t := func() int32 {
-		if t, ok := Culture_CultureType_value[strings.ToUpper(a.Type)]; ok {
-			return t
-		}
-		return int32(Culture_CULTURE_NONE)
-	}()
-
-	form := func() int32 {
-		if t, ok := Culture_FormType_value[strings.ToUpper(a.Form)]; ok {
-			return t
-		}
-		return int32(Culture_FORM_NONE)
-	}()
-
-	flocculation := func() int32 {
-		if t, ok := Culture_FlocculationType_value[strings.ToUpper(a.Form)]; ok {
-			return t
-		}
-		return int32(Culture_FLOCCULATION_NONE)
-	}()
-
-	return json.Marshal(&struct {
-		Type         int32 `json:"type,omitempty"`
-		Form         int32 `json:"form,omitempty"`
-		Flocculation int32 `json:"flocculation,omitempty"`
+	aux := &struct {
 		*Alias
+		Attenuation    *string `xml:"ATTENUATION,omitempty" json:"attenuation,omitempty"`
 	}{
-		Type:         t,
-		Form:         form,
-		Flocculation: flocculation,
-		Alias:        (*Alias)(&a),
-	})
-}
+		Alias: (*Alias)(a),
+	}
 
-func (a *Yeast) UnmarshalJSON(b []byte) error {
+	err := d.DecodeElement(aux, &start)
+	if err != nil {
+		return err
+	}
+
+	a.Attenuation = percentToFloat(aux.Attenuation)
+
 	return nil
 }
 
-type Yeasts struct {
-	Yeast []Yeast `xml:"YEAST" json:"yeast,omitempty"`
-}
-
-func (a Yeasts) MarshalJSON() ([]byte, error) {
-	b := make([]byte, 0)
-	b = append(b, []byte("[")...)
-	if len(a.Yeast) > 0 {
-		for _, hop := range a.Yeast {
-			bb, err := json.Marshal(hop)
-			if err != nil {
-				return nil, err
-			}
-
-			b = append(b, bb...)
-			b = append(b, []byte(",")...)
-		}
-
-		// remove the trailing ','
-		b = b[:len(b)-1]
+func (a Yeast) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	type Alias Yeast
+	aux := &struct {
+		*Alias
+		Attenuation    string `xml:"ATTENUATION,omitempty" json:"attenuation,omitempty"`
+	}{
+		Alias: (*Alias)(&a),
+		Attenuation: floatToPercent(a.Attenuation),
 	}
-	b = append(b, []byte("]")...)
 
-	return b, nil
+	start.Name.Local = strings.ToUpper(start.Name.Local)
+
+	err := e.EncodeElement(aux, start)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (a *Yeasts) UnmarshalJSON(b []byte) error {
+
+func (a *Culture_CultureType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var use string
+
+	err := d.DecodeElement(&use, &start)
+	if err != nil {
+		return err
+	}
+
+	if value, ok := Culture_CultureType_value[use]; ok {
+		*a = Culture_CultureType(value)
+	} else {
+		*a = CULTURE_CULTURE_NONE
+	}
+
+	return nil
+}
+
+func (a Culture_CultureType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if name, ok := Culture_CultureType_name[int32(a)]; ok {
+		err := e.EncodeElement(name, start)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (a *Culture_FormType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var use string
+
+	err := d.DecodeElement(&use, &start)
+	if err != nil {
+		return err
+	}
+
+	if value, ok := Culture_FormType_value[use]; ok {
+		*a = Culture_FormType(value)
+	} else {
+		*a = CULTURE_FORM_NONE
+	}
+
+	return nil
+}
+
+func (a Culture_FormType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if name, ok := Culture_FormType_name[int32(a)]; ok {
+		err := e.EncodeElement(name, start)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -140,135 +169,135 @@ type Culture_CultureType int32
 
 const (
 	// None
-	Culture_CULTURE_NONE Culture_CultureType = 0
+	CULTURE_CULTURE_NONE Culture_CultureType = 0
 	// Ale
-	Culture_ALE Culture_CultureType = 1
+	CULTURE_ALE Culture_CultureType = 1
 	// Lager
-	Culture_LAGER Culture_CultureType = 2
+	CULTURE_LAGER Culture_CultureType = 2
 	// Wheat
-	Culture_WHEAT Culture_CultureType = 3
+	CULTURE_WHEAT Culture_CultureType = 3
 	// Wine
-	Culture_WINE Culture_CultureType = 4
+	CULTURE_WINE Culture_CultureType = 4
 	// Champagne
-	Culture_CHAMPAGNE Culture_CultureType = 5
+	CULTURE_CHAMPAGNE Culture_CultureType = 5
 	// Bacteria
-	Culture_BACTERIA Culture_CultureType = 6
+	CULTURE_BACTERIA Culture_CultureType = 6
 	// Brett
-	Culture_BRETT Culture_CultureType = 7
+	CULTURE_BRETT Culture_CultureType = 7
 	// Kveik
-	Culture_KVEIK Culture_CultureType = 8
+	CULTURE_KVEIK Culture_CultureType = 8
 	// Lacto
-	Culture_LACTO Culture_CultureType = 9
+	CULTURE_LACTO Culture_CultureType = 9
 	// Malolactic
-	Culture_MALOLACTIC Culture_CultureType = 10
+	CULTURE_MALOLACTIC Culture_CultureType = 10
 	// Mixed-Culture
-	Culture_MIXED_CULTURE Culture_CultureType = 11
+	CULTURE_MIXED_CULTURE Culture_CultureType = 11
 	// Other
-	Culture_OTHER Culture_CultureType = 12
+	CULTURE_OTHER Culture_CultureType = 12
 	// Pedio
-	Culture_PEDIO Culture_CultureType = 13
+	CULTURE_PEDIO Culture_CultureType = 13
 	// Spontaneous
-	Culture_SPONTANEOUS Culture_CultureType = 14
+	CULTURE_SPONTANEOUS Culture_CultureType = 14
 )
 
 var Culture_CultureType_name = map[int32]string{
 	0:  "CULTURE_NONE",
-	1:  "ALE",
-	2:  "LAGER",
-	3:  "WHEAT",
-	4:  "WINE",
-	5:  "CHAMPAGNE",
-	6:  "BACTERIA",
-	7:  "BRETT",
-	8:  "KVEIK",
-	9:  "LACTO",
-	10: "MALOLACTIC",
-	11: "MIXED_CULTURE",
-	12: "OTHER",
-	13: "PEDIO",
-	14: "SPONTANEOUS",
+	1:  "Ale",
+	2:  "Lager",
+	3:  "Wheat",
+	4:  "Wine",
+	5:  "Champagne",
+	6:  "Bacteria",
+	7:  "Brett",
+	8:  "Kveik",
+	9:  "Lacto",
+	10: "Malolactic",
+	11: "Mixed Culture",
+	12: "Other",
+	13: "Pedio",
+	14: "Spontaneous",
 }
 
 var Culture_CultureType_value = map[string]int32{
 	"CULTURE_NONE":  0,
-	"ALE":           1,
-	"LAGER":         2,
-	"WHEAT":         3,
-	"WINE":          4,
-	"CHAMPAGNE":     5,
-	"BACTERIA":      6,
-	"BRETT":         7,
-	"KVEIK":         8,
-	"LACTO":         9,
-	"MALOLACTIC":    10,
-	"MIXED_CULTURE": 11,
-	"OTHER":         12,
-	"PEDIO":         13,
-	"SPONTANEOUS":   14,
+	"Ale":           1,
+	"Lager":         2,
+	"Wheat":         3,
+	"Wine":          4,
+	"Champagne":     5,
+	"Bacteria":      6,
+	"Brett":         7,
+	"Kveik":         8,
+	"Lacto":         9,
+	"Malolactic":    10,
+	"Mixed Culture": 11,
+	"Other":         12,
+	"Pedio":         13,
+	"Spontaneous":   14,
 }
 
 type Culture_FormType int32
 
 const (
 	// None
-	Culture_FORM_NONE Culture_FormType = 0
+	CULTURE_FORM_NONE Culture_FormType = 0
 	// Liquid
-	Culture_LIQUID Culture_FormType = 1
+	CULTURE_LIQUID Culture_FormType = 1
 	// Dry
-	Culture_DRY Culture_FormType = 2
+	CULTURE_DRY Culture_FormType = 2
 	// Slant
-	Culture_SLANT Culture_FormType = 3
+	CULTURE_SLANT Culture_FormType = 3
 	// Culture
-	Culture_CULTURE Culture_FormType = 4
+	CULTURE_CULTURE Culture_FormType = 4
 	// Dregs
-	Culture_DREGS Culture_FormType = 5
+	CULTURE_DREGS Culture_FormType = 5
 )
 
 var Culture_FormType_name = map[int32]string{
 	0: "FORM_NONE",
-	1: "LIQUID",
-	2: "DRY",
-	3: "SLANT",
-	4: "CULTURE",
-	5: "DREGS",
+	1: "Liquid",
+	2: "Dry",
+	3: "Slant",
+	4: "Culture",
+	5: "Dregs",
 }
 
 var Culture_FormType_value = map[string]int32{
 	"FORM_NONE": 0,
-	"LIQUID":    1,
-	"DRY":       2,
-	"SLANT":     3,
-	"CULTURE":   4,
-	"DREGS":     5,
+	"Liquid":    1,
+	"Dry":       2,
+	"Slant":     3,
+	"Culture":   4,
+	"Dregs":     5,
 }
 
 type Culture_FlocculationType int32
 
 const (
 	// None
-	Culture_FLOCCULATION_NONE Culture_FlocculationType = 0
+	CULTURE_FLOCCULATION_NONE Culture_FlocculationType = 0
 	// Low
-	Culture_LOW Culture_FlocculationType = 1
+	CULTURE_LOW Culture_FlocculationType = 1
 	// Medium
-	Culture_MEDIUM Culture_FlocculationType = 2
+	CULTURE_MEDIUM Culture_FlocculationType = 2
 	// High
-	Culture_HIGH Culture_FlocculationType = 3
+	CULTURE_HIGH Culture_FlocculationType = 3
 	// Very High
-	Culture_VERY_HIGH Culture_FlocculationType = 4
+	CULTURE_VERY_HIGH Culture_FlocculationType = 4
 )
 
 var Culture_FlocculationType_name = map[int32]string{
 	0: "FLOCCULATION_NONE",
-	1: "LOW",
-	2: "MEDIUM",
-	3: "HIGH",
-	4: "VERY_HIGH",
+	1: "Low",
+	2: "Medium",
+	3: "High",
+	4: "Very High",
 }
 
 var Culture_FlocculationType_value = map[string]int32{
 	"FLOCCULATION_NONE": 0,
-	"LOW":               1,
-	"MEDIUM":            2,
-	"HIGH":              3,
-	"VERY_HIGH":         4,
+	"Low":               1,
+	"Medium":            2,
+	"High":              3,
+	"Very High":         4,
 }

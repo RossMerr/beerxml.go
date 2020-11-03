@@ -1,8 +1,14 @@
 package beerXML
 
 import (
-	"encoding/json"
+	"encoding/xml"
+	"strings"
 )
+
+// Encloses a set of one or more Water records
+type Waters struct {
+	Water []Water `xml:"WATER" json:"water,omitempty"`
+}
 
 // The term "water" encompasses water profiles.  Though not strictly required for recipes, the water record allows
 // supporting programs to record the water profile used for brewing a particular batch.
@@ -26,44 +32,49 @@ type Water struct {
 	// The amount of Magnesium (Mg) in parts per million.
 	Magnesium     float64 `xml:"MAGNESIUM" json:"magnesium,omitempty"`
 	// The PH of the water.
-	PH            *float64 `xml:"PH" json:"ph,omitempty"`
-	Notes         *string  `xml:"NOTES" json:"notes,omitempty"`
+	PH            *float64 `xml:"PH,omitempty" json:"ph,omitempty"`
+	Notes         *string  `xml:"NOTES,omitempty" json:"notes,omitempty"`
 	// Notes about the water profile.  May be multiline.
 
 	// Extensions
 
 	// The amount of water in this record along with the units formatted for easy display in the current
 	// user defined units.  For example “5.0 gal” or “20.0 l”.
-	DisplayAmount *string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
+	DisplayAmount *string  `xml:"DISPLAY_AMOUNT,omitempty" json:"display_amount,omitempty"`
 }
 
-type Waters struct {
-	Water []Water `xml:"WATER" json:"water,omitempty"`
-}
 
-func (a Waters) MarshalJSON() ([]byte, error) {
-	b := make([]byte, 0)
-
-	b = append(b, []byte("[")...)
-	if len(a.Water) > 0 {
-		for _, hop := range a.Water {
-			bb, err := json.Marshal(hop)
-			if err != nil {
-				return nil, err
-			}
-
-			b = append(b, bb...)
-			b = append(b, []byte(",")...)
-		}
-
-		// remove the trailing ','
-		b = b[:len(b)-1]
+func (a *Water) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type Alias Water
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(a),
 	}
 
-	b = append(b, []byte("]")...)
-	return b, nil
-}
+	err := d.DecodeElement(aux, &start)
+	if err != nil {
+		return err
+	}
 
-func (a *Waters) UnmarshalJSON(b []byte) error {
 	return nil
 }
+
+func (a Water) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	type Alias Water
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(&a),
+	}
+
+	start.Name.Local = strings.ToUpper(start.Name.Local)
+
+	err := e.EncodeElement(aux, start)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+

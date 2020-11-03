@@ -19,10 +19,12 @@ func TestSchemas_Generate(t *testing.T) {
 	tests := []struct {
 		name string
 		xml  string
+		wantErr bool
 	}{
 		{
 			name: "recipes",
 			xml:  "recipes.xml",
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -32,29 +34,65 @@ func TestSchemas_Generate(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-
 			r := bytes.NewBuffer(file)
+
+			have := r.String()
 
 			decoder := xml.NewDecoder(r)
 			decoder.CharsetReader = reader.MakeCharsetReader
 			dec := xml.NewTokenDecoder(reader.Trimmer{decoder}) // trimming decoder
 			recipes := &beerXML.RECIPES{}
 			err = dec.Decode(&recipes)
-			if err != nil {
-				t.Error(err)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UnmarshalXML() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			buf := bytes.Buffer{}
-			encoder := xml.NewEncoder(&buf)
-			err = encoder.Encode(recipes)
-			if err != nil {
-				t.Error(err)
+			var buf bytes.Buffer
+			enc := xml.NewEncoder(&buf)
+
+			enc.Indent("", "\t")
+
+			err = enc.Encode(recipes)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MarshalXML() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			err = ShouldEqualXMLObject(file, buf.Bytes())
-			if err != nil {
-				t.Error(err)
+			got := buf.String()
+
+			if !reflect.DeepEqual(have, got) {
+				t.Errorf("object not equal \nexpected \n%v \ngot \n%v", have, got)
 			}
+
+
+
+
+			//file, err := ioutil.ReadFile(tt.xml)
+			//if err != nil {
+			//	t.Error(err)
+			//}
+			//
+			//r := bytes.NewBuffer(file)
+			//
+			//decoder := xml.NewDecoder(r)
+			//decoder.CharsetReader = reader.MakeCharsetReader
+			//dec := xml.NewTokenDecoder(reader.Trimmer{decoder}) // trimming decoder
+			//recipes := &beerXML.RECIPES{}
+			//err = dec.Decode(&recipes)
+			//if err != nil {
+			//	t.Error(err)
+			//}
+			//
+			//buf := bytes.Buffer{}
+			//encoder := xml.NewEncoder(&buf)
+			//err = encoder.Encode(recipes)
+			//if err != nil {
+			//	t.Error(err)
+			//}
+			//
+			//err = ShouldEqualXMLObject(file, buf.Bytes())
+			//if err != nil {
+			//	t.Error(err)
+			//}
 		})
 	}
 }

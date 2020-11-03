@@ -1,21 +1,26 @@
 package beerXML
 
 import (
-	"encoding/json"
+	"encoding/xml"
 	"strings"
 )
 
+// Encloses a set of one or more Misc records
+type MISCS struct {
+	MISC []Misc `xml:"MISC" json:"mise,omitempty"`
+}
+
 // The term "misc" encompasses all non-fermentable miscellaneous ingredients that are not hops or yeast and do not
 // significantly change the gravity of the beer.  For example: spices, clarifying agents, water treatments, etc…
-type MISC struct {
+type Misc struct {
 	// Name of the misc item.
 	Name           string  `xml:"NAME" json:"name,omitempty"`
 	// Version number of this element.  Should be “1” for this version.
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
 	// May be “Spice”, “Fining”, “Water Agent”, “Herb”, “Flavor” or “Other”
-	Type           string  `xml:"TYPE" json:"type,omitempty"`
+	Type           Misc_MiseType  `xml:"TYPE" json:"type,omitempty"`
 	// May be “Boil”, “Mash”, “Primary”, “Secondary”, “Bottling”
-	Use            string  `xml:"USE" json:"use,omitempty"`
+	Use            Misc_MiseUseType  `xml:"USE" json:"use,omitempty"`
 	// Amount of time the misc was boiled, steeped, mashed, etc in minutes.
 	Time           float64 `xml:"TIME" json:"time,omitempty"`
 	// Amount of item used.  The default measurements are by weight, but this may be the measurement in volume units
@@ -42,65 +47,92 @@ type MISC struct {
 	DisplayTime    *string  `xml:"DISPLAY_TIME" json:"display_time,omitempty"`
 }
 
-func (a MISC) MarshalJSON() ([]byte, error) {
 
-	type Alias MISC
-	t := func() int32 {
-		if t, ok := Misc_MiseType_value[strings.ToUpper(a.Type)]; ok {
-			return t
-		}
-		return int32(Misc_MISE_NONE)
-	}()
-
-	use := func() int32 {
-		if t, ok := Misc_MiseUseType_value[strings.ToUpper(a.Use)]; ok {
-			return t
-		}
-		return int32(Misc_USE_NONE)
-	}()
-
-	return json.Marshal(&struct {
-		Type int32 `json:"type,omitempty"`
-		Use  int32 `json:"use,omitempty"`
+func (a *Misc) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type Alias Misc
+	aux := &struct {
 		*Alias
 	}{
-		Type:  t,
-		Use:   use,
-		Alias: (*Alias)(&a),
-	})
-}
+		Alias: (*Alias)(a),
+	}
 
-func (a *MISC) UnmarshalJSON(b []byte) error {
+	err := d.DecodeElement(aux, &start)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-type MISCS struct {
-	MISC []MISC `xml:"MISC" json:"mise,omitempty"`
-}
-
-func (a MISCS) MarshalJSON() ([]byte, error) {
-	b := make([]byte, 0)
-	b = append(b, []byte("[")...)
-	if len(a.MISC) > 0 {
-		for _, hop := range a.MISC {
-			bb, err := json.Marshal(hop)
-			if err != nil {
-				return nil, err
-			}
-
-			b = append(b, bb...)
-			b = append(b, []byte(",")...)
-		}
-
-		// remove the trailing ','
-		b = b[:len(b)-1]
+func (a Misc) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	type Alias Misc
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(&a),
 	}
-	b = append(b, []byte("]")...)
+	start.Name.Local = strings.ToUpper(start.Name.Local)
 
-	return b, nil
+	err := e.EncodeElement(aux, start)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (a *MISCS) UnmarshalJSON(b []byte) error {
+
+func (a *Misc_MiseType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var use string
+
+	err := d.DecodeElement(&use, &start)
+	if err != nil {
+		return err
+	}
+
+	if value, ok := Misc_MiseType_value[use]; ok {
+		*a = Misc_MiseType(value)
+	} else {
+		*a = MISC_MISE_NONE
+	}
+
+	return nil
+}
+
+func (a Misc_MiseType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if name, ok := Misc_MiseType_name[int32(a)]; ok {
+		err := e.EncodeElement(name, start)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (a *Misc_MiseUseType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var use string
+
+	err := d.DecodeElement(&use, &start)
+	if err != nil {
+		return err
+	}
+
+	if value, ok := Misc_MiseUseType_value[use]; ok {
+		*a = Misc_MiseUseType(value)
+	} else {
+		*a = MISC_USE_NONE
+	}
+
+	return nil
+}
+
+func (a Misc_MiseUseType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if name, ok := Misc_MiseUseType_name[int32(a)]; ok {
+		err := e.EncodeElement(name, start)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -108,72 +140,72 @@ type Misc_MiseType int32
 
 const (
 	// None
-	Misc_MISE_NONE Misc_MiseType = 0
+	MISC_MISE_NONE Misc_MiseType = 0
 	// Spice
-	Misc_SPICE Misc_MiseType = 1
+	MISC_SPICE Misc_MiseType = 1
 	// Fining
-	Misc_FINING Misc_MiseType = 2
+	MISC_FINING Misc_MiseType = 2
 	// Water Agent
-	Misc_WATER_AGENT Misc_MiseType = 3
+	MISC_WATER_AGENT Misc_MiseType = 3
 	// Herb
-	Misc_HERB Misc_MiseType = 4
+	MISC_HERB Misc_MiseType = 4
 	// Flavor
-	Misc_FLAVOR Misc_MiseType = 5
+	MISC_FLAVOR Misc_MiseType = 5
 	// Other
-	Misc_OTHER Misc_MiseType = 6
+	MISC_OTHER Misc_MiseType = 6
 )
 
 var Misc_MiseType_name = map[int32]string{
 	0: "MISE_NONE",
-	1: "SPICE",
-	2: "FINING",
-	3: "WATER_AGENT",
-	4: "HERB",
-	5: "FLAVOR",
-	6: "OTHER",
+	1: "Spice",
+	2: "Fining",
+	3: "Water Agent",
+	4: "Herb",
+	5: "Flavor",
+	6: "Other",
 }
 
 var Misc_MiseType_value = map[string]int32{
 	"MISE_NONE":   0,
-	"SPICE":       1,
-	"FINING":      2,
-	"WATER_AGENT": 3,
-	"HERB":        4,
-	"FLAVOR":      5,
-	"OTHER":       6,
+	"Spice":       1,
+	"Fining":      2,
+	"Water Agent": 3,
+	"Herb":        4,
+	"Flavor":      5,
+	"Other":       6,
 }
 
 type Misc_MiseUseType int32
 
 const (
 	// None
-	Misc_USE_NONE Misc_MiseUseType = 0
+	MISC_USE_NONE Misc_MiseUseType = 0
 	// Boil
-	Misc_BOIL Misc_MiseUseType = 1
+	MISC_BOIL Misc_MiseUseType = 1
 	// Mash
-	Misc_MASH Misc_MiseUseType = 2
+	MISC_MASH Misc_MiseUseType = 2
 	// Primary
-	Misc_PRIMARY Misc_MiseUseType = 3
+	MISC_PRIMARY Misc_MiseUseType = 3
 	// Secondary
-	Misc_SECONDARY Misc_MiseUseType = 4
+	MISC_SECONDARY Misc_MiseUseType = 4
 	// Bottling
-	Misc_BOTTLING Misc_MiseUseType = 5
+	MISC_BOTTLING Misc_MiseUseType = 5
 )
 
 var Misc_MiseUseType_name = map[int32]string{
 	0: "USE_NONE",
-	1: "BOIL",
-	2: "MASH",
-	3: "PRIMARY",
-	4: "SECONDARY",
-	5: "BOTTLING",
+	1: "Boil",
+	2: "Mash",
+	3: "Primary",
+	4: "Secondary",
+	5: "Bottling",
 }
 
 var Misc_MiseUseType_value = map[string]int32{
 	"USE_NONE":  0,
-	"BOIL":      1,
-	"MASH":      2,
-	"PRIMARY":   3,
-	"SECONDARY": 4,
-	"BOTTLING":  5,
+	"Boil":      1,
+	"Mash":      2,
+	"Primary":   3,
+	"Secondary": 4,
+	"Bottling":  5,
 }
