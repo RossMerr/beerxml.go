@@ -5,31 +5,69 @@ import (
 	"strings"
 )
 
+// The “HOP” identifier is used to define all varieties of hops.
 type Hop struct {
+	// Name of the hops
 	Name    string  `xml:"NAME" json:"name,omitempty"`
+	// Should be set to 1 for this version of the XML standard.  May be a higher number for later versions but all
+	// later versions shall be backward compatible.
 	Version int32   `xml:"VERSION" json:"version,omitempty"`
-	Origin  string  `xml:"ORIGIN" json:"origin,omitempty"`
+	// Percent alpha of hops - for example "5.5" represents 5.5% alpha
 	Alpha   float64 `xml:"ALPHA" json:"alpha,omitempty"`
+	// Weight in Kilograms of the hops used in the recipe.
 	Amount  float64 `xml:"AMOUNT" json:"amount,omitempty"`
+	// May be "Boil", "Dry Hop", "Mash", "First Wort" or "Aroma".  Note that "Aroma" and "Dry Hop" do not contribute
+	// to the bitterness of the beer while the others do.  Aroma hops are added after the boil and do not contribute
+	// substantially to beer bitterness.
 	Use     string  `xml:"USE" json:"use,omitempty"`
+	// The time as measured in minutes.  Meaning is dependent on the “USE” field.
+	// For “Boil” this is the boil time.
+	// For “Mash” this is the mash time.
+	// For “First Wort” this is the boil time.
+	// For “Aroma” this is the steep time.
+	// For “Dry Hop” this is the amount of time to dry hop.
 	Time    float64 `xml:"TIME" json:"time,omitempty"`
-	Notes   string  `xml:"NOTES" json:"notes,omitempty"`
-	Type    string  `xml:"TYPE" json:"type,omitempty"`
-	Form    string  `xml:"FORM" json:"form,omitempty"`
-	Beta    float64 `xml:"BETA" json:"beta,omitempty"`
-	HSI     float64 `xml:"HSI" json:"hsi,omitempty"`
+	// Textual notes about the hops, usage, substitutes.  May be a multiline entry.
+	Notes   *string  `xml:"NOTES" json:"notes,omitempty"`
+	// May be "Bittering", "Aroma" or "Both"
+	Type    *string  `xml:"TYPE" json:"type,omitempty"`
+	// May be "Pellet", "Plug" or "Leaf"
+	Form    *string  `xml:"FORM" json:"form,omitempty"`
+	// Hop beta percentage - for example "4.4" denotes 4.4 % beta
+	Beta    *float64 `xml:"BETA" json:"beta,omitempty"`
+	// Hop Stability Index - defined as the percentage of hop alpha lost in 6 months of storage
+	HSI     *float64 `xml:"HSI" json:"hsi,omitempty"`
+	// Place of origin for the hops
+	Origin  *string  `xml:"ORIGIN" json:"origin,omitempty"`
+	// Substitutes that can be used for this hops
+	Substitutes *string `xml:"SUBSTITUTES" json:"substitutes,omitempty"`
+	// Humulene level in percent.
+	Humulene *string `xml:"HUMULENE" json:"humulene,omitempty"`
+	// Caryophyllene level in percent.
+	Caryophyllene *string `xml:"CARYOPHYLLENE" json:"caryophyllene,omitempty"`
+	// Cohumulone level in percent
+	Cohumulone *string `xml:"COHUMULONE" json:"cohumulone,omitempty"`
+	// Myrcene level in percent
+	Myrcene *string  `xml:"MYRCENE" json:"myrcene,omitempty"`
 
-	DisplayAmount string `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
-	DisplayTime   string `xml:"DISPLAY_TIME" json:"display_time,omitempty"`
-	Inventory     string `xml:"INVENTORY" json:"inventory,omitempty"`
+	// Extensions
+
+	// The amount of hops in this record along with the units formatted for easy display in the current user defined units.  For example “100 g” or “1.5 oz”.
+	DisplayAmount *string `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
+	// Amount in inventory for this item along with the units – for example “10.0 oz”
+	Inventory     *string `xml:"INVENTORY" json:"inventory,omitempty"`
+	// Time displayed in minutes for all uses except for the dry hop which is in days.  For example “60 min”, “3 days”.
+	DisplayTime   *string `xml:"DISPLAY_TIME" json:"display_time,omitempty"`
 }
 
 func (a Hop) MarshalJSON() ([]byte, error) {
 
 	type Alias Hop
 	t := func() int32 {
-		if t, ok := Hop_HopsType_value[strings.ToUpper(a.Type)]; ok {
-			return t
+		if a.Type != nil {
+			if t, ok := Hop_HopsType_value[strings.ToUpper(*a.Type)]; ok {
+				return t
+			}
 		}
 		return int32(Hop_HOPS_NONE)
 	}()
@@ -42,8 +80,10 @@ func (a Hop) MarshalJSON() ([]byte, error) {
 	}()
 
 	form := func() int32 {
-		if t, ok := Hop_HopsFormType_value[strings.ToUpper(a.Form)]; ok {
-			return t
+		if a.Form != nil {
+			if t, ok := Hop_HopsFormType_value[strings.ToUpper(*a.Form)]; ok {
+				return t
+			}
 		}
 		return int32(Hop_HOPS_FORM_NONE)
 	}()

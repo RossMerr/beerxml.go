@@ -5,29 +5,64 @@ import (
 	"strings"
 )
 
+// The term "yeast" encompasses all yeasts, including dry yeast, liquid yeast and yeast starters.
 type Yeast struct {
+	// Name of the yeast.
 	Name           string  `xml:"NAME" json:"name,omitempty"`
+	// Version of the standard.  Should be “1” for this version.
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
+	// May be “Ale”, “Lager”, “Wheat”, “Wine” or “Champagne”
 	Type           string  `xml:"TYPE" json:"type,omitempty"`
+	// May be “Liquid”, “Dry”, “Slant” or “Culture”
 	Form           string  `xml:"FORM" json:"form,omitempty"`
+	// The amount of yeast, measured in liters.  For a starter this is the size of the starter.
+	// If the flag AMOUNT_IS_WEIGHT is set to TRUE then this measurement is in kilograms and not liters.
 	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
-	Amountisweight bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
-	Laboratory     string  `xml:"LABORATORY" json:"laboratory,omitempty"`
-	Productid      string  `xml:"PRODUCT_ID" json:"product_id,omitempty"`
-	Mintemperature float64 `xml:"MIN_TEMPERATURE" json:"min_temperature,omitempty"`
-	Maxtemperature float64 `xml:"MAX_TEMPERATURE" json:"max_temperature,omitempty"`
-	Flocculation   string  `xml:"FLOCCULATION" json:"flocculation,omitempty"`
-	Attenuation    float64 `xml:"ATTENUATION" json:"attenuation,omitempty"`
-	Notes          string  `xml:"NOTES" json:"notes,omitempty"`
-	Bestfor        string  `xml:"BEST_FOR" json:"best_for,omitempty"`
-	Maxreuse       float64 `xml:"MAX_REUSE" json:"max_reuse,omitempty"`
-	Timescultured  float64 `xml:"TIMES_CULTURED" json:"times_cultured,omitempty"`
-	Addtosecondary bool    `xml:"ADD_TO_SECONDARY" json:"add_to_secondary,omitempty"`
-	CultureDate    string  `xml:"CULTURE_DATE" json:"culture_date,omitempty"`
+	// TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.
+	// Default value (if not present) is assumed to be FALSE – therefore the yeast measurement is a liquid
+	// amount by default.
+	AmountIsWeight *bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
+	// The name of the laboratory that produced the yeast.
+	Laboratory     *string  `xml:"LABORATORY" json:"laboratory,omitempty"`
+	// The manufacturer’s product ID label or number that identifies this particular strain of yeast.
+	ProductID      *string  `xml:"PRODUCT_ID" json:"product_id,omitempty"`
+	// The minimum recommended temperature for fermenting this yeast strain in degrees Celsius.
+	MinTemperature *float64 `xml:"MIN_TEMPERATURE" json:"min_temperature,omitempty"`
+	// The maximum recommended temperature for fermenting this yeast strain in Celsius.
+	MaxTemperature *float64 `xml:"MAX_TEMPERATURE" json:"max_temperature,omitempty"`
+	// May be “Low”, “Medium”, “High” or “Very High”
+	Flocculation   *string  `xml:"FLOCCULATION" json:"flocculation,omitempty"`
+	// Average attenuation for this yeast strain.
+	Attenuation    *float64 `xml:"ATTENUATION" json:"attenuation,omitempty"`
+	// Notes on this yeast strain.  May be a multiline entry.
+	Notes          *string  `xml:"NOTES" json:"notes,omitempty"`
+	// Styles or types of beer this yeast strain is best suited for.
+	BestFor        *string  `xml:"BEST_FOR" json:"best_for,omitempty"`
+	// Number of times this yeast has been reused as a harvested culture.  This number should be zero if this is a
+	// product directly from the manufacturer.
+	TimesCultured  *float64 `xml:"TIMES_CULTURED" json:"times_cultured,omitempty"`
+	// Recommended of times this yeast can be reused (recultured from a previous batch)
+	MaxReuse       *float64 `xml:"MAX_REUSE" json:"max_reuse,omitempty"`
+	// Flag denoting that this yeast was added for a secondary (or later) fermentation as opposed to the primary
+	// fermentation.  Useful if one uses two or more yeast strains for a single brew (eg: Lambic).
+	// Default value is FALSE.
+	AddToSecondary *bool    `xml:"ADD_TO_SECONDARY" json:"add_to_secondary,omitempty"`
+
+	// Extensions
+
+	// The amount of yeast or starter in this record along with the units formatted for easy display in the
+	// current user defined units.  For example “1.5 oz” or “100 g”.
 	DisplayAmount  string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
-	DispMaxTemp    string  `xml:"DISP_MAX_TEMP" json:"disp_max_temp,omitempty"`
+	// Minimum fermentation temperature converted to current user units along with the units.
+	// For example “54.0 F” or “24.2 C”
 	DispMinTemp    string  `xml:"DISP_MIN_TEMP" json:"disp_min_temp,omitempty"`
+	// Maximum fermentation temperature converted to current user units along with the units.
+	// For example “54.0 F” or “24.2 C”
+	DispMaxTemp    string  `xml:"DISP_MAX_TEMP" json:"disp_max_temp,omitempty"`
+	// Amount in inventory for this hop along with the units – for example “10.0 pkgs”
 	Inventory      string  `xml:"INVENTORY" json:"inventory,omitempty"`
+	// Date sample was last cultured in a neutral date form such as “10 Dec 04”
+	CultureDate    string  `xml:"CULTURE_DATE" json:"culture_date,omitempty"`
 }
 
 func (a Yeast) MarshalJSON() ([]byte, error) {

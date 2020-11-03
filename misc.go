@@ -5,20 +5,41 @@ import (
 	"strings"
 )
 
+// The term "misc" encompasses all non-fermentable miscellaneous ingredients that are not hops or yeast and do not
+// significantly change the gravity of the beer.  For example: spices, clarifying agents, water treatments, etc…
 type MISC struct {
+	// Name of the misc item.
 	Name           string  `xml:"NAME" json:"name,omitempty"`
+	// Version number of this element.  Should be “1” for this version.
 	Version        int32   `xml:"VERSION" json:"version,omitempty"`
+	// May be “Spice”, “Fining”, “Water Agent”, “Herb”, “Flavor” or “Other”
 	Type           string  `xml:"TYPE" json:"type,omitempty"`
+	// May be “Boil”, “Mash”, “Primary”, “Secondary”, “Bottling”
 	Use            string  `xml:"USE" json:"use,omitempty"`
-	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
+	// Amount of time the misc was boiled, steeped, mashed, etc in minutes.
 	Time           float64 `xml:"TIME" json:"time,omitempty"`
-	Amountisweight bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
-	Usefor         string  `xml:"USE_FOR" json:"use_for,omitempty"`
-	Notes          string  `xml:"NOTES" json:"notes,omitempty"`
-	BatchSize      string  `xml:"BATCH_SIZE" json:"batch_size,omitempty"`
-	DisplayAmount  string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
-	DisplayTime    string  `xml:"DISPLAY_TIME" json:"display_time,omitempty"`
-	Inventory      string  `xml:"INVENTORY" json:"inventory,omitempty"`
+	// Amount of item used.  The default measurements are by weight, but this may be the measurement in volume units
+	// if AMOUNT_IS_WEIGHT is set to TRUE for this record.
+	// If a liquid it is in liters,
+	// if a solid the weight is measured in kilograms.
+	Amount         float64 `xml:"AMOUNT" json:"amount,omitempty"`
+	// TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.
+	// Default value (if not present) is assumed to be FALSE.
+	AmountIsWeight *bool    `xml:"AMOUNT_IS_WEIGHT" json:"amount_is_weight,omitempty"`
+	// Short description of what the ingredient is used for in text
+	UseFor         *string  `xml:"USE_FOR" json:"use_for,omitempty"`
+	// Detailed notes on the item including usage.  May be multiline.
+	Notes          *string  `xml:"NOTES" json:"notes,omitempty"`
+
+	// Extensions
+
+	// The amount of the item in this record along with the units formatted for easy display in the current user
+	// defined units.  For example “1.5 lbs” or “2.1 kg”.
+	DisplayAmount  *string  `xml:"DISPLAY_AMOUNT" json:"display_amount,omitempty"`
+	// Amount in inventory for this item along with the units – for example “10.0 lb”
+	Inventory      *string  `xml:"INVENTORY" json:"inventory,omitempty"`
+	// Time in appropriate units along with the units as in “10 min” or “3 days”.
+	DisplayTime    *string  `xml:"DISPLAY_TIME" json:"display_time,omitempty"`
 }
 
 func (a MISC) MarshalJSON() ([]byte, error) {

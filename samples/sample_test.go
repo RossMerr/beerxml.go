@@ -7,13 +7,11 @@ import (
 	"fmt"
 	"html"
 	"io/ioutil"
-	"net/http/httptest"
 	"reflect"
 	"strconv"
 	"testing"
 
 	beerXML "github.com/beerproto/beerxml.go"
-	"github.com/beerproto/beerxml.go/handlers"
 	"github.com/beerproto/beerxml.go/reader"
 )
 
@@ -35,13 +33,16 @@ func TestSchemas_Generate(t *testing.T) {
 				t.Error(err)
 			}
 
-			reader := bytes.NewBuffer(file)
+			r := bytes.NewBuffer(file)
 
-			req := httptest.NewRequest("POST", "http://example.com", reader)
-			w := httptest.NewRecorder()
+			decoder := xml.NewDecoder(r)
+			decoder.CharsetReader = reader.MakeCharsetReader
+			dec := xml.NewTokenDecoder(reader.Trimmer{decoder}) // trimming decoder
 			recipes := &beerXML.RECIPES{}
-
-			handlers.BeerXML(w, req, recipes)
+			err = dec.Decode(&recipes)
+			if err != nil {
+				t.Error(err)
+			}
 
 			buf := bytes.Buffer{}
 			encoder := xml.NewEncoder(&buf)

@@ -25,7 +25,7 @@
 			60
 		</BOIL_TIME>
 		<EFFICIENCY>
-			72.0
+			72 %
 		</EFFICIENCY>
 		<HOPS>
 			<HOP>
@@ -184,9 +184,6 @@
 				<DISPLAY_TIME>
 					10.0 min
 				</DISPLAY_TIME>
-				<BATCH_SIZE>
-					5.00 gal
-				</BATCH_SIZE>
 			</MISC>
 		</MISCS>
 		<YEASTS>
